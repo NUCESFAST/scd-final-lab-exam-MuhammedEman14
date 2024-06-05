@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 3  # Number of replicas you want to run
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: muhammedeman14/auth:latest  # Replace with your backend image
+          ports:
+            - containerPort: 3140
+      containers:
+        - name: backend1
+          image: muhammedeman14/class:latest  # Replace with your backend image
+          ports:
+            - containerPort: 3141
+      containers:
+        - name: backend2
+          image: muhammedeman14/event:latest  # Replace with your backend image
+          ports:
+            - containerPort: 3142
+       containers:
+        - name: backend3
+          image: muhammedeman14/post:latest  # Replace with your backend image
+          ports:
+            - containerPort: 3143
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3143
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3143
+            initialDelaySeconds: 10
+            periodSeconds: 30

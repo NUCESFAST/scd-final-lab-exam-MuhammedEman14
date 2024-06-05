@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         // Define environment variables for Docker Hub credentials
-        DOCKERHUB_CREDENTIALS = credentials('22SEP2023') // Jenkins credentials ID
         DOCKERHUB_NAMESPACE = 'muhammedeman14'
         GIT_REPO_URL = 'https://github.com/NUCESFAST/scd-final-lab-exam-MuhammedEman14'
     }

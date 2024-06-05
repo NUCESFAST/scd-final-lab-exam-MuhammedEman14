@@ -101,7 +101,7 @@ pipeline {
                 stage('Push Frontend Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                                 docker.image("${DOCKERHUB_NAMESPACE}/frontend").push()
                             }
                         }
@@ -110,7 +110,7 @@ pipeline {
                 stage('Push Auth Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                                 docker.image("${DOCKERHUB_NAMESPACE}/auth1").push()
                             }
                         }
@@ -119,7 +119,7 @@ pipeline {
                 stage('Push Classrooms Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                                 docker.image("${DOCKERHUB_NAMESPACE}/classrooms1").push()
                             }
                         }
@@ -128,7 +128,7 @@ pipeline {
                 stage('Push Event-Bus Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                                 docker.image("${DOCKERHUB_NAMESPACE}/event-bus1").push()
                             }
                         }
@@ -137,7 +137,7 @@ pipeline {
                 stage('Push Post Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                                 docker.image("${DOCKERHUB_NAMESPACE}/post1").push()
                             }
                         }
@@ -167,8 +167,10 @@ pipeline {
 
     post {
         always {
-            // Clean up the workspace
-            cleanWs()
+            node {
+                // Clean up the workspace
+                cleanWs()
+            }
         }
         success {
             echo 'Pipeline completed successfully!'

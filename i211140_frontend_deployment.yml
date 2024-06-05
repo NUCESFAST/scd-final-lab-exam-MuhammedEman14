@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 3  # Number of replicas you want to run
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: muhammedeman14/client:latest  # Replace with your frontend image
+          ports:
+            - containerPort: 1140
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 1140
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 1140
+            initialDelaySeconds: 10
+            periodSeconds: 30

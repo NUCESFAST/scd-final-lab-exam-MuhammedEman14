@@ -2,7 +2,7 @@
 FROM node:16
 
 # Set the working directory
-WORKDIR /i211140_backend
+WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -14,7 +14,8 @@ RUN npm install
 COPY . .
 
 # Expose the backend API on a port (e.g., 5000)
-EXPOSE 3140
+EXPOSE 3141
 
 # Start the application
 CMD ["npm", "start"]
+

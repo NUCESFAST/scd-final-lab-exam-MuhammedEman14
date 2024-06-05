@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Define environment variables for Docker Hub credentials
-        DOCKERHUB_NAMESPACE = 'muhammedeman14'
+        DOCKERHUB_USERNAME = 'muhammedeman14' // Replace with your Docker Hub username
+        DOCKERHUB_PASSWORD = '22SEP2023' // Replace with your Docker Hub password
         GIT_REPO_URL = 'https://github.com/NUCESFAST/scd-final-lab-exam-MuhammedEman14'
     }
 
@@ -60,37 +60,45 @@ pipeline {
                 stage('Build Frontend Image') {
                     steps {
                         script {
-                            docker.build("${DOCKERHUB_NAMESPACE}/frontend", 'client')
+                            docker.build("${DOCKERHUB_USERNAME}/frontend", 'client')
                         }
                     }
                 }
                 stage('Build Auth Image') {
                     steps {
                         script {
-                            docker.build("${DOCKERHUB_NAMESPACE}/auth1", 'Auth')
+                            docker.build("${DOCKERHUB_USERNAME}/auth1", 'Auth')
                         }
                     }
                 }
                 stage('Build Classrooms Image') {
                     steps {
                         script {
-                            docker.build("${DOCKERHUB_NAMESPACE}/classrooms1", 'Classrooms')
+                            docker.build("${DOCKERHUB_USERNAME}/classrooms1", 'Classrooms')
                         }
                     }
                 }
                 stage('Build Event-Bus Image') {
                     steps {
                         script {
-                            docker.build("${DOCKERHUB_NAMESPACE}/event-bus1", 'event-bus')
+                            docker.build("${DOCKERHUB_USERNAME}/event-bus1", 'event-bus')
                         }
                     }
                 }
                 stage('Build Post Image') {
                     steps {
                         script {
-                            docker.build("${DOCKERHUB_NAMESPACE}/post1", 'Post')
+                            docker.build("${DOCKERHUB_USERNAME}/post1", 'Post')
                         }
                     }
+                }
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    sh "echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin"
                 }
             }
         }
@@ -100,45 +108,35 @@ pipeline {
                 stage('Push Frontend Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
-                                docker.image("${DOCKERHUB_NAMESPACE}/frontend").push()
-                            }
+                            docker.image("${DOCKERHUB_USERNAME}/frontend").push()
                         }
                     }
                 }
                 stage('Push Auth Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
-                                docker.image("${DOCKERHUB_NAMESPACE}/auth1").push()
-                            }
+                            docker.image("${DOCKERHUB_USERNAME}/auth1").push()
                         }
                     }
                 }
                 stage('Push Classrooms Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
-                                docker.image("${DOCKERHUB_NAMESPACE}/classrooms1").push()
-                            }
+                            docker.image("${DOCKERHUB_USERNAME}/classrooms1").push()
                         }
                     }
                 }
                 stage('Push Event-Bus Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
-                                docker.image("${DOCKERHUB_NAMESPACE}/event-bus1").push()
-                            }
+                            docker.image("${DOCKERHUB_USERNAME}/event-bus1").push()
                         }
                     }
                 }
                 stage('Push Post Image') {
                     steps {
                         script {
-                            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
-                                docker.image("${DOCKERHUB_NAMESPACE}/post1").push()
-                            }
+                            docker.image("${DOCKERHUB_USERNAME}/post1").push()
                         }
                     }
                 }
@@ -166,10 +164,8 @@ pipeline {
 
     post {
         always {
-            node {
-                // Clean up the workspace
-                cleanWs()
-            }
+            // Clean up the workspace
+            cleanWs()
         }
         success {
             echo 'Pipeline completed successfully!'

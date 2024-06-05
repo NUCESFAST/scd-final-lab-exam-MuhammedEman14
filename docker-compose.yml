@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    volumes:
+      - db:/data/db
+
+  frontend:
+    build: ./client
+    restart: unless-stopped
+    ports:
+      - "1140:1140"
+    depends_on:
+      - mongodb
+    stdin_open: true
+    tty: true
+
+  auth:
+    build: ./Auth
+    restart: unless-stopped
+    ports:
+      - "3140:3140"
+    depends_on:
+      - mongodb
+    
+    stdin_open: true
+    tty: true
+  classrooms:
+    build: ./Classrooms
+    restart: unless-stopped
+    ports:
+      - "3141:3141"
+    depends_on:
+      - mongodb
+    stdin_open: true
+    tty: true
+  events:
+    build: ./event-bus
+    restart: unless-stopped
+    ports:
+      - "3142:3142"
+    depends_on:
+      - mongodb
+    stdin_open: true
+    tty: true
+  post:
+    build: ./Post
+    restart: unless-stopped
+    ports:
+      - "3143:3143"
+    depends_on:
+      - mongodb
+    stdin_open: true
+    tty: true
+volumes:
+  db:
